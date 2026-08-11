@@ -5,6 +5,7 @@ import { Toolbar, type Filter } from './components/Toolbar.tsx';
 import { Toast, type ToastState } from './components/Toast.tsx';
 import { useTodos, type Notify } from './useTodos.ts';
 import { useTheme } from './useTheme.ts';
+import { isLocalStorageMode } from './api.ts';
 
 const FILTER_KEY = 'todo2.filter';
 
@@ -142,6 +143,7 @@ export default function App() {
         <span>
           <kbd>드래그</kbd>로 정렬
         </span>
+        {isLocalStorageMode && <span>이 브라우저에만 저장됩니다</span>}
       </footer>
 
       <Toast toast={toast} onDismiss={() => setToast(null)} />

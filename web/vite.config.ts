@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 const API_TARGET = process.env.API_URL ?? 'http://localhost:3000';
 
 export default defineConfig({
+  // 하위 경로에 올릴 때 지정한다 (예: GitHub Pages → VITE_BASE=/todo-app/)
+  base: process.env.VITE_BASE ?? '/',
   plugins: [react()],
   server: {
     port: 5173,

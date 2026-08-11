@@ -1,16 +1,10 @@
 import type { Todo } from '../../shared/types.ts';
+import { ApiError } from './apiError.ts';
+import { localStore } from './localStore.ts';
+
+export { ApiError };
 
 const BASE = '/api';
-
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    readonly status: number
-  ) {
-    super(message);
-    this.name = 'ApiError';
-  }
-}
 
 async function request<T>(path: string, init: RequestInit & { json?: unknown } = {}): Promise<T> {
   const { json, ...rest } = init;
@@ -46,7 +40,7 @@ function safeParse(text: string): unknown {
   }
 }
 
-export const api = {
+const httpApi = {
   list: () => request<Todo[]>('/todos'),
 
   create: (title: string) => request<Todo>('/todos', { method: 'POST', json: { title } }),
@@ -69,3 +63,11 @@ export const api = {
   clearCompleted: () =>
     request<{ removed: Todo[] }>('/todos/clear-completed', { method: 'POST' }),
 };
+
+/**
+ * 기본은 API 서버(`/api`)를 쓴다. `VITE_STORAGE=local` 로 빌드하면 서버 없이
+ * 브라우저 저장소만 사용한다 — 정적 호스팅(GitHub Pages) 배포용.
+ */
+export const isLocalStorageMode = import.meta.env.VITE_STORAGE === 'local';
+
+export const api: typeof httpApi = isLocalStorageMode ? localStore : httpApi;

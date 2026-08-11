@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "build": "npm run build --workspace @todo2/web",
+    "deploy": "node scripts/deploy-pages.mjs",
     "start": "npm run start --workspace @todo2/server",
     "test": "npm test --workspace @todo2/server",
     "typecheck": "npm run typecheck --workspaces"

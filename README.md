@@ -84,6 +84,27 @@ npm start         # http://localhost:3000 에서 API와 화면을 함께 서빙
 빌드 도구가 필요한 곳은 프론트엔드뿐입니다. 서버는 Node 24의 TypeScript 실행과
 내장 `node:sqlite`를 쓰기 때문에 트랜스파일 단계도, DB 드라이버 의존성도 없습니다.
 
+## 배포
+
+### GitHub Pages (정적, 서버 없음)
+
+```bash
+npm run deploy    # 빌드 → gh-pages 브랜치로 푸시
+```
+
+GitHub Pages는 정적 파일만 호스팅하므로 API 서버를 올릴 수 없습니다. 그래서 이
+빌드는 `VITE_STORAGE=local`로 만들어져 서버 대신 **브라우저 `localStorage`**를
+씁니다([localStore.ts](web/src/localStore.ts)가 서버와 같은 규칙을 구현). 화면과
+기능은 동일하지만 데이터는 그 브라우저에만 남고 기기 간 공유는 되지 않습니다.
+
+### 서버까지 포함한 배포
+
+데이터를 서버에 두려면 Node 24를 실행할 수 있는 곳(Fly.io, Railway, Render, VPS
+등)에 올리고 `npm run build && npm start`를 실행하면 됩니다. 이때는 기본 빌드를
+쓰므로 클라이언트가 같은 오리진의 `/api`를 호출합니다. 프론트엔드만 따로 호스팅한다면
+Vite 프록시 대신 API 오리진을 지정하도록 [api.ts](web/src/api.ts)의 `BASE`를 바꾸고
+서버에 CORS를 추가하세요.
+
 ## 기능
 
 - 추가 / 완료 토글 / 수정 / 삭제, 필터(전체·진행 중·완료)와 남은 개수
