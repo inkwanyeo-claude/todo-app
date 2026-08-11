@@ -105,17 +105,24 @@ GitHub Pages는 정적 파일만 호스팅하므로 API 서버를 올릴 수 없
 
 | 항목 | 값 |
 | --- | --- |
-| Install Command | `npm install` |
+| Install Command | `npm install --include=dev` |
 | Build Command | `VITE_STORAGE=local npm run build --workspace @todo2/web` |
 | Output Directory | `web/dist` |
+
+Install 명령에 `--include=dev`가 붙는 이유는 Vercel 빌드 환경이 `NODE_ENV=production`
+이어서 npm이 기본적으로 devDependencies를 건너뛰기 때문입니다. 그러면 Vite가 설치되지
+않아 빌드가 `vite: command not found`(exit 127)로 실패합니다.
+
+`gh-pages` 브랜치는 GitHub Pages용 빌드 결과물만 있어 Vercel이 빌드할 수 없습니다.
+프로젝트의 *Ignored Build Step*을 `main` 브랜치에서만 빌드하도록 설정해 두었습니다.
 
 GitHub Pages와 마찬가지로 서버 없이 `localStorage`를 쓰는 빌드입니다. Pages는
 하위 경로(`/todo-app/`)에 올라가므로 `VITE_BASE`가 필요하지만, Vercel은 도메인
 루트에 서비스되므로 기본값(`/`)을 그대로 씁니다.
 
-> 루트 `package.json`의 `engines`는 Vercel 빌드 이미지와 맞추기 위해 `>=22`이고,
-> Node 24가 실제로 필요한 쪽은 `server/package.json`에 따로 명시돼 있습니다.
-> 프론트엔드 빌드만 하는 Vercel에서는 Node 24가 필요하지 않습니다.
+> Vercel 빌드 이미지도 Node 24를 제공하므로 루트 `engines`는 `>=24` 그대로 둡니다.
+> 프론트엔드 빌드 자체에는 Node 24가 필요하지 않지만(Node 22면 충분), 저장소 전체
+> 기준으로는 서버가 Node 24를 요구합니다.
 
 ### 서버까지 포함한 배포
 
