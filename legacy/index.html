@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>할 일 · Todo</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>✅</text></svg>">
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1>할 일</h1>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="테마 전환" title="테마 전환">
+        <span aria-hidden="true" id="theme-icon">🌙</span>
+      </button>
+    </header>
+
+    <form id="new-form" class="new-form" autocomplete="off">
+      <input
+        id="new-input"
+        class="new-input"
+        type="text"
+        name="title"
+        placeholder="무엇을 해야 하나요?"
+        aria-label="새 할 일"
+        maxlength="200"
+        required>
+      <button class="primary-btn" type="submit">추가</button>
+    </form>
+
+    <div class="toolbar">
+      <div class="filters" role="group" aria-label="필터">
+        <button class="filter" type="button" data-filter="all" aria-pressed="true">전체</button>
+        <button class="filter" type="button" data-filter="active" aria-pressed="false">진행 중</button>
+        <button class="filter" type="button" data-filter="done" aria-pressed="false">완료</button>
+      </div>
+      <div class="toolbar-right">
+        <span id="count" class="count" aria-live="polite"></span>
+        <button id="toggle-all" class="ghost-btn" type="button">모두 완료</button>
+        <button id="clear-done" class="ghost-btn danger" type="button">완료 삭제</button>
+      </div>
+    </div>
+
+    <ul id="list" class="list" aria-label="할 일 목록"></ul>
+    <p id="empty" class="empty" hidden></p>
+
+    <footer class="hints">
+      <span><kbd>더블클릭</kbd> 수정</span>
+      <span><kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> 순서 이동</span>
+      <span><kbd>드래그</kbd>로 정렬</span>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden>
+    <span id="toast-text"></span>
+    <button id="toast-action" class="toast-action" type="button" hidden></button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
