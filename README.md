@@ -97,6 +97,26 @@ GitHub Pages는 정적 파일만 호스팅하므로 API 서버를 올릴 수 없
 씁니다([localStore.ts](web/src/localStore.ts)가 서버와 같은 규칙을 구현). 화면과
 기능은 동일하지만 데이터는 그 브라우저에만 남고 기기 간 공유는 되지 않습니다.
 
+### Vercel (정적, 서버 없음)
+
+[vercel.json](vercel.json)이 빌드 방식을 지정해 두었습니다. Vercel 대시보드에서
+이 저장소를 import 하면 그대로 배포되고, 이후 `main`에 푸시할 때마다 자동으로
+갱신됩니다. 설정을 바꿀 필요는 없습니다.
+
+| 항목 | 값 |
+| --- | --- |
+| Install Command | `npm install` |
+| Build Command | `VITE_STORAGE=local npm run build --workspace @todo2/web` |
+| Output Directory | `web/dist` |
+
+GitHub Pages와 마찬가지로 서버 없이 `localStorage`를 쓰는 빌드입니다. Pages는
+하위 경로(`/todo-app/`)에 올라가므로 `VITE_BASE`가 필요하지만, Vercel은 도메인
+루트에 서비스되므로 기본값(`/`)을 그대로 씁니다.
+
+> 루트 `package.json`의 `engines`는 Vercel 빌드 이미지와 맞추기 위해 `>=22`이고,
+> Node 24가 실제로 필요한 쪽은 `server/package.json`에 따로 명시돼 있습니다.
+> 프론트엔드 빌드만 하는 Vercel에서는 Node 24가 필요하지 않습니다.
+
 ### 서버까지 포함한 배포
 
 데이터를 서버에 두려면 Node 24를 실행할 수 있는 곳(Fly.io, Railway, Render, VPS
